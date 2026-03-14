@@ -4,3 +4,6 @@ build/
 *.exe
 *.log
 .vscode/
+vector_example
+*.swp
+*.tmp
