@@ -3,18 +3,19 @@
 
 #include <vector>
 #include <cstddef>
+#include <stdexcept>
 
 class Vector {
 private:
-    std::vector<double> data;
+    std::vector<double> data; // internal storage for vector elements
 
 public:
     /* Constructors */
-    Vector(size_t size);
+    explicit Vector(size_t size);
     Vector(size_t size, double initialValue);
 
     /* Size */
-    size_t size() const;
+    [[nodiscard]] size_t size() const;
 
     /* Element Access */
     double get(size_t index) const;

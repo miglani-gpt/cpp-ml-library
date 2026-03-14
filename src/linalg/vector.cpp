@@ -1,4 +1,4 @@
-#include "../include/vector.hpp"
+#include "ml/linalg/vector.hpp"
 
 #include <stdexcept>
 #include <cmath>
@@ -53,14 +53,19 @@ const double& Vector::operator[](size_t index) const {
 
 double Vector::dot(const Vector& other) const {
 
-    if (size() != other.size()) {
+    size_t n = size();
+
+    if (n != other.size()) {
         throw std::invalid_argument("Vector sizes must match for dot product");
     }
 
+    const auto& a = data;
+    const auto& b = other.data;
+
     double result = 0.0;
 
-    for (size_t i = 0; i < size(); i++) {
-        result += data[i] * other.data[i];
+    for (size_t i = 0; i < n; i++) {
+        result += a[i] * b[i];
     }
 
     return result;
@@ -78,13 +83,15 @@ double Vector::norm() const {
 
 Vector Vector::operator+(const Vector& other) const {
 
-    if (size() != other.size()) {
+    size_t n = size();
+
+    if (n != other.size()) {
         throw std::invalid_argument("Vector sizes must match for addition");
     }
 
-    Vector result(size());
+    Vector result(n);
 
-    for (size_t i = 0; i < size(); i++) {
+    for (size_t i = 0; i < n; i++) {
         result[i] = data[i] + other.data[i];
     }
 
@@ -96,13 +103,15 @@ Vector Vector::operator+(const Vector& other) const {
 
 Vector Vector::operator-(const Vector& other) const {
 
-    if (size() != other.size()) {
+    size_t n = size();
+
+    if (n != other.size()) {
         throw std::invalid_argument("Vector sizes must match for subtraction");
     }
 
-    Vector result(size());
+    Vector result(n);
 
-    for (size_t i = 0; i < size(); i++) {
+    for (size_t i = 0; i < n; i++) {
         result[i] = data[i] - other.data[i];
     }
 
@@ -114,9 +123,11 @@ Vector Vector::operator-(const Vector& other) const {
 
 Vector Vector::operator*(double scalar) const {
 
-    Vector result(size());
+    size_t n = size();
 
-    for (size_t i = 0; i < size(); i++) {
+    Vector result(n);
+
+    for (size_t i = 0; i < n; i++) {
         result[i] = data[i] * scalar;
     }
 
@@ -128,9 +139,11 @@ Vector Vector::operator*(double scalar) const {
 
 Vector operator*(double scalar, const Vector& v) {
 
-    Vector result(v.size());
+    size_t n = v.size();
 
-    for (size_t i = 0; i < v.size(); i++) {
+    Vector result(n);
+
+    for (size_t i = 0; i < n; i++) {
         result[i] = scalar * v[i];
     }
 
@@ -144,8 +157,8 @@ double Vector::sum() const {
 
     double total = 0.0;
 
-    for (size_t i = 0; i < size(); i++) {
-        total += data[i];
+    for (double v : data) {
+        total += v;
     }
 
     return total;
@@ -156,11 +169,13 @@ double Vector::sum() const {
 
 double Vector::mean() const {
 
-    if (size() == 0) {
+    size_t n = size();
+
+    if (n == 0) {
         throw std::runtime_error("Cannot compute mean of empty vector");
     }
 
-    return sum() / size();
+    return sum() / n;
 }
 
 
@@ -168,13 +183,15 @@ double Vector::mean() const {
 
 size_t Vector::argmax() const {
 
-    if (size() == 0) {
+    size_t n = size();
+
+    if (n == 0) {
         throw std::runtime_error("Cannot compute argmax of empty vector");
     }
 
     size_t index = 0;
 
-    for (size_t i = 1; i < size(); i++) {
+    for (size_t i = 1; i < n; i++) {
         if (data[i] > data[index]) {
             index = i;
         }
@@ -188,13 +205,15 @@ size_t Vector::argmax() const {
 
 size_t Vector::argmin() const {
 
-    if (size() == 0) {
+    size_t n = size();
+
+    if (n == 0) {
         throw std::runtime_error("Cannot compute argmin of empty vector");
     }
 
     size_t index = 0;
 
-    for (size_t i = 1; i < size(); i++) {
+    for (size_t i = 1; i < n; i++) {
         if (data[i] < data[index]) {
             index = i;
         }
@@ -208,16 +227,18 @@ size_t Vector::argmin() const {
 
 Vector Vector::normalize() const {
 
-    double n = norm();
+    double nrm = norm();
 
-    if (n == 0) {
+    if (nrm == 0) {
         throw std::runtime_error("Cannot normalize zero vector");
     }
 
-    Vector result(size());
+    size_t n = size();
 
-    for (size_t i = 0; i < size(); i++) {
-        result[i] = data[i] / n;
+    Vector result(n);
+
+    for (size_t i = 0; i < n; i++) {
+        result[i] = data[i] / nrm;
     }
 
     return result;
@@ -230,9 +251,9 @@ void Vector::print() const {
 
     std::cout << "[ ";
 
-    for (size_t i = 0; i < size(); i++) {
-        std::cout << data[i] << " ";
+    for (double v : data) {
+        std::cout << v << " ";
     }
 
-    std::cout << "]" << std::endl;
+    std::cout << "]\n";
 }

@@ -4,7 +4,5 @@ build/
 *.exe
 *.log
 .vscode/
-vector_example
-matrix_example
 *.swp
 *.tmp

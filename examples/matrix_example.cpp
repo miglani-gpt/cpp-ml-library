@@ -1,128 +1,143 @@
-#include "../include/matrix.hpp"
-#include "../include/vector.hpp"
-
+#include "ml/linalg/matrix.hpp"
 #include <iostream>
 
-int main() {
+int main()
+{
+    std::cout << "=== Matrix Construction ===\n";
 
-    std::cout << "=== Matrix Creation ===\n";
+    Matrix A(3,3);
 
-    Matrix A(2, 3);
-
-    A.set(0,0,1);
-    A.set(0,1,2);
-    A.set(0,2,3);
-
-    A.set(1,0,4);
-    A.set(1,1,5);
-    A.set(1,2,6);
+    A(0,0)=1; A(0,1)=2; A(0,2)=3;
+    A(1,0)=4; A(1,1)=5; A(1,2)=6;
+    A(2,0)=7; A(2,1)=8; A(2,2)=9;
 
     std::cout << "Matrix A:\n";
     A.print();
 
 
-    Matrix B(2,3,1.0);
+    std::cout << "\n=== Identity Matrix ===\n";
 
-    std::cout << "\nMatrix B (initialized with 1s):\n";
-    B.print();
-
-
-    std::cout << "\n=== Element Access ===\n";
-
-    std::cout << "A(1,2) = " << A(1,2) << std::endl;
-
-    A(1,2) = 10;
-
-    std::cout << "After modification A:\n";
-    A.print();
+    Matrix I = Matrix::identity(3);
+    I.print();
 
 
-    std::cout << "\n=== Matrix Addition ===\n";
+    std::cout << "\n=== Matrix Arithmetic ===\n";
 
-    Matrix C = A + B;
+    Matrix B(3,3,1.0);
 
-    C.print();
+    Matrix add = A + B;
+    Matrix sub = A - B;
+    Matrix scalar = A * 2.0;
+    Matrix scalar2 = 2.0 * A;
+
+    std::cout << "A + B:\n";
+    add.print();
+
+    std::cout << "A - B:\n";
+    sub.print();
+
+    std::cout << "A * 2:\n";
+    scalar.print();
+
+    std::cout << "2 * A:\n";
+    scalar2.print();
 
 
-    std::cout << "\n=== Matrix Subtraction ===\n";
+    std::cout << "\n=== Hadamard Product ===\n";
 
-    Matrix D = A - B;
+    Matrix had = A.hadamard(B);
+    had.print();
 
-    D.print();
+
+    std::cout << "\n=== Matrix Transpose ===\n";
+
+    Matrix At = A.transpose();
+    At.print();
 
 
-    std::cout << "\n=== Scalar Multiplication ===\n";
+    std::cout << "\n=== Row / Column Extraction ===\n";
 
-    Matrix E = A * 2.0;
+    Vector r = A.row(1);
+    Vector c = A.col(2);
 
-    E.print();
+    std::cout << "Row 1: ";
+    r.print();
+
+    std::cout << "Column 2: ";
+    c.print();
 
 
     std::cout << "\n=== Matrix Vector Multiplication ===\n";
 
     Vector v(3);
-    v.set(0,1);
-    v.set(1,2);
-    v.set(2,3);
+
+    v[0]=1;
+    v[1]=2;
+    v[2]=3;
 
     Vector result = A * v;
 
-    std::cout << "Vector result:\n";
+    std::cout << "A * v = ";
     result.print();
 
 
-    std::cout << "\n=== Matrix Matrix Multiplication ===\n";
+    std::cout << "\n=== Matrix Multiplication ===\n";
 
-    Matrix M1(2,3);
+    Matrix C = A * I;
 
-    M1.set(0,0,1);
-    M1.set(0,1,2);
-    M1.set(0,2,3);
-
-    M1.set(1,0,4);
-    M1.set(1,1,5);
-    M1.set(1,2,6);
+    C.print();
 
 
-    Matrix M2(3,2);
+    std::cout << "\n=== Matrix Statistics ===\n";
 
-    M2.set(0,0,7);
-    M2.set(0,1,8);
-
-    M2.set(1,0,9);
-    M2.set(1,1,10);
-
-    M2.set(2,0,11);
-    M2.set(2,1,12);
-
-    Matrix M3 = M1 * M2;
-
-    std::cout << "Result of M1 * M2:\n";
-    M3.print();
+    std::cout << "Sum: " << A.sum() << "\n";
+    std::cout << "Mean: " << A.mean() << "\n";
+    std::cout << "Trace: " << A.trace() << "\n";
 
 
-    std::cout << "\n=== Transpose ===\n";
+    std::cout << "\n=== Normalization ===\n";
 
-    Matrix At = A.transpose();
-
-    At.print();
-
-
-    std::cout << "\n=== Row Extraction ===\n";
-
-    Vector r = A.row(1);
-
-    r.print();
+    Matrix norm = A.normalize();
+    norm.print();
 
 
-    std::cout << "\n=== Column Extraction ===\n";
+    std::cout << "\n=== Determinant ===\n";
 
-    Vector c = A.col(2);
+    Matrix D(2,2);
 
-    c.print();
+    D(0,0)=4; D(0,1)=7;
+    D(1,0)=2; D(1,1)=6;
+
+    std::cout << "Matrix D:\n";
+    D.print();
+
+    std::cout << "det(D): " << D.determinant() << "\n";
 
 
-    std::cout << "\n=== Program Completed Successfully ===\n";
+    std::cout << "\n=== Inverse ===\n";
+
+    Matrix inv = D.inverse();
+
+    std::cout << "D^-1:\n";
+    inv.print();
+
+
+    std::cout << "\n=== Standardization ===\n";
+
+    Matrix std = A.standardize();
+    std.print();
+
+
+    std::cout << "\n=== Covariance Matrix ===\n";
+
+    Matrix cov = A.covariance();
+    cov.print();
+
+
+    std::cout << "\n=== Correlation Matrix ===\n";
+
+    Matrix corr = A.correlation();
+    corr.print();
 
     return 0;
 }

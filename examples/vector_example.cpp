@@ -1,96 +1,66 @@
-#include "../include/vector.hpp"
+#include "ml/linalg/vector.hpp"
 #include <iostream>
 
-int main() {
+int main()
+{
+    std::cout << "=== Vector Construction ===\n";
 
-    std::cout << "=== Vector Creation ===\n";
+    Vector v1(5);
+    Vector v2(5, 2.0);
 
-    Vector v1(3);
-    v1.set(0, 1.0);
-    v1.set(1, 2.0);
-    v1.set(2, 3.0);
+    for (size_t i = 0; i < v1.size(); i++)
+        v1[i] = i + 1;
 
-    Vector v2(3, 4.0);
-
-    std::cout << "v1 = ";
+    std::cout << "v1: ";
     v1.print();
 
-    std::cout << "v2 = ";
+    std::cout << "v2: ";
     v2.print();
 
 
-    std::cout << "\n=== Element Access ===\n";
+    std::cout << "\n=== Vector Arithmetic ===\n";
 
-    std::cout << "v1[1] = " << v1[1] << std::endl;
+    Vector add = v1 + v2;
+    Vector sub = v1 - v2;
+    Vector mul = v1 * 3.0;
+    Vector mul2 = 2.0 * v1;
 
-    v1[1] = 10.0;
+    std::cout << "v1 + v2: ";
+    add.print();
 
-    std::cout << "After modifying v1[1]: ";
-    v1.print();
+    std::cout << "v1 - v2: ";
+    sub.print();
 
+    std::cout << "v1 * 3: ";
+    mul.print();
 
-    std::cout << "\n=== Vector Addition ===\n";
-
-    Vector v3 = v1 + v2;
-
-    std::cout << "v1 + v2 = ";
-    v3.print();
-
-
-    std::cout << "\n=== Vector Subtraction ===\n";
-
-    Vector v4 = v1 - v2;
-
-    std::cout << "v1 - v2 = ";
-    v4.print();
+    std::cout << "2 * v1: ";
+    mul2.print();
 
 
-    std::cout << "\n=== Scalar Multiplication ===\n";
+    std::cout << "\n=== Dot Product & Norm ===\n";
 
-    Vector v5 = v1 * 2.0;
+    double dot = v1.dot(v2);
+    double norm = v1.norm();
 
-    std::cout << "v1 * 2 = ";
-    v5.print();
-
-    Vector v6 = 3.0 * v1;
-
-    std::cout << "3 * v1 = ";
-    v6.print();
+    std::cout << "dot(v1, v2): " << dot << "\n";
+    std::cout << "||v1||: " << norm << "\n";
 
 
-    std::cout << "\n=== Dot Product ===\n";
+    std::cout << "\n=== Statistical Utilities ===\n";
 
-    double dotProduct = v1.dot(v2);
-
-    std::cout << "v1 . v2 = " << dotProduct << std::endl;
-
-
-    std::cout << "\n=== Norm ===\n";
-
-    std::cout << "||v1|| = " << v1.norm() << std::endl;
-
-
-    std::cout << "\n=== Sum and Mean ===\n";
-
-    std::cout << "sum(v1) = " << v1.sum() << std::endl;
-    std::cout << "mean(v1) = " << v1.mean() << std::endl;
-
-
-    std::cout << "\n=== Argmax and Argmin ===\n";
-
-    std::cout << "argmax(v1) = " << v1.argmax() << std::endl;
-    std::cout << "argmin(v1) = " << v1.argmin() << std::endl;
+    std::cout << "sum(v1): " << v1.sum() << "\n";
+    std::cout << "mean(v1): " << v1.mean() << "\n";
+    std::cout << "argmax(v1): " << v1.argmax() << "\n";
+    std::cout << "argmin(v1): " << v1.argmin() << "\n";
 
 
     std::cout << "\n=== Normalization ===\n";
 
-    Vector normalized = v1.normalize();
+    Vector norm_v = v1.normalize();
 
-    std::cout << "normalized v1 = ";
-    normalized.print();
-
-
-    std::cout << "\n=== Program Completed Successfully ===\n";
+    std::cout << "normalized v1: ";
+    norm_v.print();
 
     return 0;
 }
