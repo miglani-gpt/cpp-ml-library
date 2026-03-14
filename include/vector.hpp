@@ -1,22 +1,50 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <vector> //standard vector library not the vector class we implement
-
+#include <vector>
+#include <cstddef>
 
 class Vector {
 private:
     std::vector<double> data;
 
 public:
-    Vector(int size);
+    /* Constructors */
+    Vector(size_t size);
+    Vector(size_t size, double initialValue);
 
-    int size() const;
+    /* Size */
+    size_t size() const;
 
-    double get(int index) const;
-    void set(int index, double value);
+    /* Element Access */
+    double get(size_t index) const;
+    void set(size_t index, double value);
 
+    double& operator[](size_t index);
+    const double& operator[](size_t index) const;
+
+    /* Vector Operations */
     double dot(const Vector& other) const;
+    double norm() const;
+
+    Vector operator+(const Vector& other) const;
+    Vector operator-(const Vector& other) const;
+    Vector operator*(double scalar) const;
+
+    /* Scalar * Vector support */
+    friend Vector operator*(double scalar, const Vector& v);
+
+    /* Statistical / ML Utilities */
+    double sum() const;
+    double mean() const;
+
+    size_t argmax() const;
+    size_t argmin() const;
+
+    Vector normalize() const;
+
+    /* Utility */
+    void print() const;
 };
 
 #endif
