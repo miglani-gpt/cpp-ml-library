@@ -1,261 +1,209 @@
 # C++ Machine Learning Library
 
 ![C++](https://img.shields.io/badge/language-C++-blue)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Build](https://img.shields.io/badge/build-CMake-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-in%20development-orange)
 
-A lightweight **machine learning library built from scratch in C++** to understand the internal mechanics of machine learning algorithms.
+A lightweight **machine learning library built from scratch in C++** designed to understand how real ML frameworks work internally.
 
-This project focuses on implementing **core ML algorithms, linear algebra utilities, and optimization techniques without external ML frameworks**.
+The project focuses on implementing:
 
-The goal is to learn **how real machine learning libraries are designed internally**.
+- Linear algebra from scratch
+- Machine learning algorithms
+- Optimization techniques
+- Statistical utilities
+
+All without relying on external ML frameworks.
+
+The goal is to understand **how real machine learning libraries are implemented internally**.
+
+---
+
+# Demo
+
+*(Optional — add a GIF later)*
+
+Example placeholder:
+
+![demo](docs/demo.gif)
+
+You can record a short terminal demo and place it in `docs/demo.gif`.
 
 ---
 
 # Table of Contents
 
-* Overview
-* Features
-* Architecture
-* Implemented Algorithms
-* Project Structure
-* Example Usage
-* Build Instructions
-* Roadmap
-* Learning Objectives
-* License
+- Overview
+- Features
+- Architecture
+- Implemented Components
+- Project Structure
+- Example Usage
+- Build Instructions
+- Roadmap
+- Learning Objectives
+- License
 
 ---
 
 # Overview
 
-Most machine learning libraries hide the internal math and implementation details.
+Most machine learning libraries hide the mathematical implementation details behind high-level APIs.
 
 This project aims to:
 
-* implement ML algorithms **from scratch**
-* understand **numerical computation**
-* design **modular ML systems**
-* build **clean C++ architecture**
+- implement ML algorithms **from scratch**
+- build a **custom linear algebra engine**
+- understand **numerical computation**
+- design **modular ML systems**
+- explore how **real ML libraries are structured**
 
-The project acts as a **mini machine learning framework similar to Scikit-Learn but implemented in C++**.
+The library acts as a **mini machine learning framework inspired by Scikit-Learn**, implemented entirely in **modern C++**.
 
 ---
 
 # Features
 
-## Core Numerical Components
+## Custom Linear Algebra Engine
 
-### Matrix Library
+All machine learning computations are built on a custom **Vector and Matrix library**.
 
-Custom matrix implementation used for all machine learning computations.
+### Matrix Features
 
-Supported operations:
+- Matrix creation
+- Matrix addition and subtraction
+- Scalar multiplication
+- Matrix multiplication
+- Matrix–vector multiplication
+- Matrix transpose
+- Row and column extraction
+- Determinant computation
+- Matrix inverse
+- Hadamard product
+- Matrix normalization
 
-* Matrix creation
-* Matrix addition and subtraction
-* Matrix multiplication
-* Scalar multiplication
-* Matrix transpose
-* Mean and sum operations
-* Row and column extraction
+### Vector Features
 
----
-
-### Vector Utilities
-
-Essential vector operations used in ML algorithms:
-
-* Dot product
-* Vector magnitude
-* Normalization
-* Euclidean distance
-
----
-
-### Dataset Loader
-
-CSV-based dataset loader.
-
-Features:
-
-* CSV parsing
-* Feature matrix extraction
-* Label vector extraction
-
-Example dataset format:
-
-size,price
-1000,200000
-1200,230000
-1500,310000
+- Dot product
+- Vector norm
+- Vector normalization
+- Sum and mean
+- Argmax / argmin
 
 ---
 
-### Mathematical Utilities
+## Statistical Utilities
 
-Common math functions used across algorithms.
+Common utilities used in machine learning pipelines:
 
-Includes:
-
-* Sigmoid function
-* Mean
-* Variance
-* Standard deviation
-* Distance functions
-
----
-
-# Implemented Machine Learning Algorithms
-
-## Linear Regression
-
-Predicts continuous values using a linear relationship between variables.
-
-Model form:
-
-y = wX + b
-
-Features:
-
-* Model training
-* Prediction
-* Mean Squared Error loss
-
-Functions:
-
-fit(X, y)
-predict(X)
-
----
-
-## Logistic Regression
-
-Binary classification algorithm using the sigmoid activation function.
-
-Features:
-
-* Probability prediction
-* Binary classification
-* Cross entropy loss
-
-Functions:
-
-fit(X, y)
-predict(X)
-predict_proba(X)
-
----
-
-## K-Means Clustering
-
-Unsupervised clustering algorithm.
-
-Steps implemented:
-
-1. Initialize cluster centroids
-2. Assign data points to nearest centroid
-3. Update centroid positions
-4. Repeat until convergence
-
-Functions:
-
-fit(X)
-predict(X)
-
----
-
-## Principal Component Analysis (PCA)
-
-Dimensionality reduction technique.
-
-Steps implemented:
-
-1. Standardize data
-2. Compute covariance matrix
-3. Calculate eigenvectors
-4. Project data onto principal components
-
-Functions:
-
-fit(X)
-transform(X)
-
----
-
-# Optimization
-
-## Gradient Descent
-
-Used for training models by minimizing loss functions.
-
-Features:
-
-* Adjustable learning rate
-* Iterative optimization
-* Loss tracking
-
----
-
-# Evaluation Metrics
-
-Regression metrics
-
-* Mean Squared Error (MSE)
-* Mean Absolute Error (MAE)
-* Root Mean Squared Error (RMSE)
-* R² Score
-
-Classification metrics
-
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-
----
-
-# Data Utilities
-
-## Train/Test Split
-
-Utility for splitting datasets into training and testing sets.
-
-Example:
-
-train_test_split(X, y)
-
----
-
-## Feature Scaling
-
-Preprocessing utilities including:
-
-* Standardization
-* Min-Max scaling
+- Trace
+- Column mean
+- Feature standardization
+- Covariance matrix
+- Correlation matrix
 
 ---
 
 # Architecture
 
-The library follows a modular architecture.
+The library follows a layered architecture similar to real machine learning frameworks.
 
 ```
-Dataset  →  Preprocessing  →  Model Training  →  Evaluation
+        Linear Algebra Engine
+                │
+                ▼
+        Statistical Utilities
+                │
+                ▼
+        Machine Learning Algorithms
+                │
+                ▼
+        Evaluation / Data Utilities
 ```
 
-Core components:
+Core design principles:
+
+- minimal dependencies
+- modular architecture
+- educational implementation
+- efficient numerical operations
+
+---
+
+# Implemented Components
+
+## Linear Algebra
+
+Core numerical engine:
+
+- Vector class
+- Matrix class
+- Matrix operations
+- Statistical matrix utilities
+
+These components act as the **foundation for all ML algorithms**.
+
+---
+
+## Machine Learning Algorithms (Planned / In Progress)
+
+### Linear Regression
+
+Predicts continuous values using a linear relationship between variables.
+
+Model:
 
 ```
-Matrix Engine
-      │
-      ▼
-ML Algorithms
-      │
-      ▼
-Evaluation Metrics
+y = wX + b
 ```
+
+Functions:
+
+```
+fit(X, y)
+predict(X)
+```
+
+---
+
+### Logistic Regression
+
+Binary classification using sigmoid activation.
+
+Functions:
+
+```
+fit(X, y)
+predict(X)
+predict_proba(X)
+```
+
+---
+
+### K-Means Clustering
+
+Unsupervised clustering algorithm.
+
+Algorithm steps:
+
+1. Initialize cluster centroids
+2. Assign points to nearest centroid
+3. Update centroids
+4. Repeat until convergence
+
+---
+
+### Principal Component Analysis (PCA)
+
+Dimensionality reduction technique.
+
+Steps:
+
+1. Standardize data
+2. Compute covariance matrix
+3. Extract principal components
+4. Project data onto new feature space
 
 ---
 
@@ -264,33 +212,40 @@ Evaluation Metrics
 ```
 cpp-ml-library
 │
-├── src
-│   ├── matrix.cpp
-│   ├── linear_regression.cpp
-│   ├── logistic_regression.cpp
-│   ├── kmeans.cpp
-│   └── pca.cpp
+├── include/                     # Public library headers
+│   └── ml/
+│       ├── linalg/              # Linear algebra engine
+│       │   ├── vector.hpp
+│       │   └── matrix.hpp
+│       │
+│       ├── models/              # ML algorithms
+│       │
+│       ├── stats/               # Statistical utilities
+│       │
+│       └── optim/               # Optimization algorithms
 │
-├── include
-│   ├── matrix.h
-│   ├── linear_regression.h
-│   ├── logistic_regression.h
-│   ├── kmeans.h
-│   └── pca.h
+├── src/                         # Library implementations
+│   ├── linalg/
+│   │   ├── vector.cpp
+│   │   └── matrix.cpp
+│   │
+│   ├── models/
+│   ├── stats/
+│   └── optim/
 │
-├── examples
-│   ├── regression_example.cpp
-│   └── kmeans_example.cpp
+├── examples/                    # Example programs
+│   ├── vector_example.cpp
+│   └── matrix_example.cpp
 │
-├── tests
+├── tests/                       # Unit tests
 │
-├── data
-│   ├── iris.csv
-│   └── housing.csv
+├── data/                        # Sample datasets
 │
-├── docs
+├── docs/                        # Documentation
 │
-├── CMakeLists.txt
+├── build/                       # Build directory (ignored by git)
+│
+├── CMakeLists.txt               # CMake build configuration
 ├── README.md
 └── .gitignore
 ```
@@ -299,20 +254,24 @@ cpp-ml-library
 
 # Example Usage
 
+Example using the matrix library:
+
 ```cpp
-#include "linear_regression.h"
-#include "dataset.h"
+#include "ml/linalg/vector.hpp"
+#include "ml/linalg/matrix.hpp"
 
 int main() {
 
-    Dataset data;
-    data.loadCSV("housing.csv");
+    Matrix A(2,2);
 
-    LinearRegression model;
+    A(0,0) = 1;
+    A(0,1) = 2;
+    A(1,0) = 3;
+    A(1,1) = 4;
 
-    model.fit(data.X, data.y);
+    Matrix B = A.transpose();
 
-    auto predictions = model.predict(data.X);
+    B.print();
 
     return 0;
 }
@@ -322,21 +281,40 @@ int main() {
 
 # Build Instructions
 
-Clone the repository
+This project uses **CMake**.
 
+## Clone repository
+
+```
 git clone https://github.com/your-username/cpp-ml-library.git
-
-Navigate to the project directory
-
 cd cpp-ml-library
+```
 
-Compile using g++
+## Create build directory
 
-g++ src/*.cpp examples/example.cpp -o ml_program
+```
+mkdir build
+cd build
+```
 
-Run
+## Configure project
 
-./ml_program
+```
+cmake ..
+```
+
+## Compile
+
+```
+make
+```
+
+## Run examples
+
+```
+./vector_example
+./matrix_example
+```
 
 ---
 
@@ -344,12 +322,16 @@ Run
 
 Planned improvements:
 
-* Decision Trees
-* K-Nearest Neighbors
-* Neural Networks
-* GPU acceleration
-* Model serialization
-* Visualization utilities
+- Linear Regression implementation
+- Logistic Regression
+- K-Means clustering
+- PCA implementation
+- Decision Trees
+- K-Nearest Neighbors
+- Neural Networks
+- Model serialization
+- Visualization utilities
+- GPU acceleration
 
 ---
 
@@ -357,14 +339,14 @@ Planned improvements:
 
 This project demonstrates:
 
-* Linear algebra for machine learning
-* Optimization using gradient descent
-* Implementation of ML algorithms from scratch
-* Efficient C++ design for numerical computation
-* Software architecture for ML libraries
+- Linear algebra for machine learning
+- Implementation of ML algorithms from scratch
+- Numerical optimization techniques
+- Modular C++ architecture
+- Efficient data structures for ML systems
 
 ---
 
 # License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the **MIT License**.
