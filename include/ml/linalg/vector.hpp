@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstddef>
 #include <stdexcept>
-#include <functional>
+#include <initializer_list>
 
 class Matrix; // forward declaration
 
@@ -16,10 +16,15 @@ public:
     /* Constructors */
     explicit Vector(size_t size);
     Vector(size_t size, double initialValue);
+    Vector(std::initializer_list<double> list);
 
     /* Move Semantics */
     Vector(Vector&& other) noexcept;
     Vector& operator=(Vector&& other) noexcept;
+
+    // Copy semantics
+    Vector(const Vector& other);
+    Vector& operator=(const Vector& other);
 
     /* Size */
     [[nodiscard]] size_t size() const;
@@ -61,7 +66,15 @@ public:
     void print() const;
 
     /* ML Ops */
-    Vector apply(std::function<double(double)> func) const;
+    template <typename Func>
+    Vector apply(Func f) const {
+        Vector result(size());  // ✅ FIXED
+        for (size_t i = 0; i < size(); ++i) {
+            result[i] = f(data[i]);
+        }
+        return result;
+    }
+
     Vector hadamard(const Vector& other) const;
     Matrix outer(const Vector& other) const;
 

@@ -1,20 +1,30 @@
 #include "ml/linalg/vector.hpp"
 #include "ml/linalg/matrix.hpp"
 
-#include <stdexcept>
-#include <cmath>
 #include <iostream>
+#include <cmath>
+#include <stdexcept>
+#include <algorithm>
 
-/* Constructors */
+// ================================
+// Constructors
+// ================================
 
-Vector::Vector(size_t size) : data(size, 0.0) {}
+Vector::Vector(size_t size)
+    : data(size, 0.0) {}
 
-Vector::Vector(size_t size, double initialValue) : data(size, initialValue) {}
+Vector::Vector(size_t size, double initialValue)
+    : data(size, initialValue) {}
 
+Vector::Vector(std::initializer_list<double> list)
+    : data(list) {}
 
-/* Move Semantics */
+// ================================
+// Move Semantics
+// ================================
 
-Vector::Vector(Vector&& other) noexcept : data(std::move(other.data)) {}
+Vector::Vector(Vector&& other) noexcept
+    : data(std::move(other.data)) {}
 
 Vector& Vector::operator=(Vector&& other) noexcept {
     if (this != &other) {
@@ -23,153 +33,135 @@ Vector& Vector::operator=(Vector&& other) noexcept {
     return *this;
 }
 
+// ================================
+// Copy Semantics
+// ================================
 
-/* Size */
+Vector::Vector(const Vector& other)
+    : data(other.data) {}
+
+Vector& Vector::operator=(const Vector& other) {
+    if (this != &other) {
+        data = other.data;
+    }
+    return *this;
+}
+
+// ================================
+// Size
+// ================================
 
 size_t Vector::size() const {
     return data.size();
 }
 
-
-/* Element Access */
+// ================================
+// Element Access
+// ================================
 
 double Vector::get(size_t index) const {
-    if (index >= size()) {
+    if (index >= data.size()) {
         throw std::out_of_range("Vector index out of range");
     }
     return data[index];
 }
 
 void Vector::set(size_t index, double value) {
-    if (index >= size()) {
+    if (index >= data.size()) {
         throw std::out_of_range("Vector index out of range");
     }
     data[index] = value;
 }
 
 double& Vector::operator[](size_t index) {
-    if (index >= size()) {
-        throw std::out_of_range("Vector index out of range");
-    }
     return data[index];
 }
 
 const double& Vector::operator[](size_t index) const {
-    if (index >= size()) {
-        throw std::out_of_range("Vector index out of range");
-    }
     return data[index];
 }
 
-
-/* Dot Product */
+// ================================
+// Vector Operations
+// ================================
 
 double Vector::dot(const Vector& other) const {
-    size_t n = size();
-
-    if (n != other.size()) {
-        throw std::invalid_argument("Vector sizes must match for dot product");
+    if (size() != other.size()) {
+        throw std::invalid_argument("Dot product size mismatch");
     }
 
     double result = 0.0;
-
-    for (size_t i = 0; i < n; i++) {
+    for (size_t i = 0; i < size(); ++i) {
         result += data[i] * other.data[i];
     }
-
     return result;
 }
-
-
-/* Vector Norm */
 
 double Vector::norm() const {
     return std::sqrt(dot(*this));
 }
 
-
-/* Vector Addition */
-
 Vector Vector::operator+(const Vector& other) const {
-    size_t n = size();
-
-    if (n != other.size()) {
-        throw std::invalid_argument("Vector sizes must match for addition");
+    if (size() != other.size()) {
+        throw std::invalid_argument("Vector addition size mismatch");
     }
 
-    Vector result(n);
-
-    for (size_t i = 0; i < n; i++) {
-        result.data[i] = data[i] + other.data[i];
+    Vector result(size());
+    for (size_t i = 0; i < size(); ++i) {
+        result[i] = data[i] + other.data[i];
     }
-
     return result;
 }
-
-
-/* Vector Subtraction */
 
 Vector Vector::operator-(const Vector& other) const {
-    size_t n = size();
-
-    if (n != other.size()) {
-        throw std::invalid_argument("Vector sizes must match for subtraction");
+    if (size() != other.size()) {
+        throw std::invalid_argument("Vector subtraction size mismatch");
     }
 
-    Vector result(n);
-
-    for (size_t i = 0; i < n; i++) {
-        result.data[i] = data[i] - other.data[i];
+    Vector result(size());
+    for (size_t i = 0; i < size(); ++i) {
+        result[i] = data[i] - other.data[i];
     }
-
     return result;
 }
-
-
-/* Scalar Multiplication */
 
 Vector Vector::operator*(double scalar) const {
-    size_t n = size();
-
-    Vector result(n);
-
-    for (size_t i = 0; i < n; i++) {
-        result.data[i] = data[i] * scalar;
+    Vector result(size());
+    for (size_t i = 0; i < size(); ++i) {
+        result[i] = data[i] * scalar;
     }
-
     return result;
 }
 
-
-/* In-place Operations */
+// ================================
+// In-place operations
+// ================================
 
 Vector& Vector::operator+=(const Vector& other) {
     if (size() != other.size()) {
-        throw std::invalid_argument("Size mismatch");
+        throw std::invalid_argument("Vector += size mismatch");
     }
 
     for (size_t i = 0; i < size(); ++i) {
         data[i] += other.data[i];
     }
-
     return *this;
 }
 
 Vector& Vector::operator-=(const Vector& other) {
     if (size() != other.size()) {
-        throw std::invalid_argument("Size mismatch");
+        throw std::invalid_argument("Vector -= size mismatch");
     }
 
     for (size_t i = 0; i < size(); ++i) {
         data[i] -= other.data[i];
     }
-
     return *this;
 }
 
 Vector& Vector::operator*=(double scalar) {
-    for (double& val : data) {
-        val *= scalar;
+    for (double& v : data) {
+        v *= scalar;
     }
     return *this;
 }
@@ -179,164 +171,123 @@ Vector& Vector::operator/=(double scalar) {
         throw std::invalid_argument("Division by zero");
     }
 
-    for (double& val : data) {
-        val /= scalar;
+    for (double& v : data) {
+        v /= scalar;
     }
     return *this;
 }
 
-
-/* Scalar * Vector */
+// ================================
+// Scalar * Vector
+// ================================
 
 Vector operator*(double scalar, const Vector& v) {
-    size_t n = v.size();
-
-    Vector result(n);
-
-    for (size_t i = 0; i < n; i++) {
-        result.data[i] = scalar * v.data[i];
-    }
-
-    return result;
+    return v * scalar;
 }
 
-
-/* Sum */
+// ================================
+// Statistical / ML Utilities
+// ================================
 
 double Vector::sum() const {
-    double total = 0.0;
-
+    double s = 0.0;
     for (double v : data) {
-        total += v;
+        s += v;
     }
-
-    return total;
+    return s;
 }
-
-
-/* Mean */
 
 double Vector::mean() const {
-    size_t n = size();
-
-    if (n == 0) {
-        throw std::runtime_error("Cannot compute mean of empty vector");
+    if (data.empty()) {
+        throw std::invalid_argument("Mean of empty vector is undefined");
     }
-
-    return sum() / n;
+    return sum() / data.size();
 }
-
-
-/* Argmax */
 
 size_t Vector::argmax() const {
-    size_t n = size();
-
-    if (n == 0) {
-        throw std::runtime_error("Cannot compute argmax of empty vector");
+    if (data.empty()) {
+        throw std::invalid_argument("argmax of empty vector");
     }
 
-    size_t index = 0;
-
-    for (size_t i = 1; i < n; i++) {
-        if (data[i] > data[index]) {
-            index = i;
+    size_t idx = 0;
+    for (size_t i = 1; i < data.size(); ++i) {
+        if (data[i] > data[idx]) {
+            idx = i;
         }
     }
-
-    return index;
+    return idx;
 }
-
-
-/* Argmin */
 
 size_t Vector::argmin() const {
-    size_t n = size();
-
-    if (n == 0) {
-        throw std::runtime_error("Cannot compute argmin of empty vector");
+    if (data.empty()) {
+        throw std::invalid_argument("argmin of empty vector");
     }
 
-    size_t index = 0;
-
-    for (size_t i = 1; i < n; i++) {
-        if (data[i] < data[index]) {
-            index = i;
+    size_t idx = 0;
+    for (size_t i = 1; i < data.size(); ++i) {
+        if (data[i] < data[idx]) {
+            idx = i;
         }
     }
-
-    return index;
+    return idx;
 }
-
-
-/* Normalize */
 
 Vector Vector::normalize() const {
-    double nrm = norm();
-
-    if (nrm == 0) {
-        throw std::runtime_error("Cannot normalize zero vector");
+    if (data.empty()) {
+        return Vector(0);
     }
 
-    size_t n = size();
-
-    Vector result(n);
-
-    for (size_t i = 0; i < n; i++) {
-        result.data[i] = data[i] / nrm;
-    }
-
-    return result;
-}
-
-
-/* Print */
-
-void Vector::print() const {
-    std::cout << "[ ";
+    double min_val = data[0];
+    double max_val = data[0];
 
     for (double v : data) {
-        std::cout << v << " ";
+        if (v < min_val) min_val = v;
+        if (v > max_val) max_val = v;
     }
 
-    std::cout << "]\n";
-}
+    double range = max_val - min_val;
+    Vector result(size(), 0.0);
 
-
-/* Apply */
-
-Vector Vector::apply(std::function<double(double)> func) const {
-    Vector result(size());
+    if (range == 0.0) {
+        return result;
+    }
 
     for (size_t i = 0; i < size(); ++i) {
-        result.data[i] = func(data[i]);
+        result[i] = (data[i] - min_val) / range;
     }
 
     return result;
 }
 
+// ================================
+// Utility
+// ================================
 
-/* Hadamard */
+void Vector::print() const {
+    for (size_t i = 0; i < size(); ++i) {
+        std::cout << data[i] << " ";
+    }
+    std::cout << '\n';
+}
+
+// ================================
+// ML Ops
+// ================================
 
 Vector Vector::hadamard(const Vector& other) const {
     if (size() != other.size()) {
-        throw std::invalid_argument("Vector sizes must match for hadamard product");
+        throw std::invalid_argument("Hadamard product size mismatch");
     }
 
     Vector result(size());
-
     for (size_t i = 0; i < size(); ++i) {
-        result.data[i] = data[i] * other.data[i];
+        result[i] = data[i] * other.data[i];
     }
-
     return result;
 }
 
-
-/* Outer Product */
-
 Matrix Vector::outer(const Vector& other) const {
-    Matrix result(size(), other.size());
+    Matrix result(size(), other.size(), 0.0);
 
     for (size_t i = 0; i < size(); ++i) {
         for (size_t j = 0; j < other.size(); ++j) {
@@ -347,26 +298,23 @@ Matrix Vector::outer(const Vector& other) const {
     return result;
 }
 
-
-/* Scalar Ops */
+// ================================
+// Scalar Ops
+// ================================
 
 Vector Vector::operator+(double scalar) const {
     Vector result(size());
-
     for (size_t i = 0; i < size(); ++i) {
-        result.data[i] = data[i] + scalar;
+        result[i] = data[i] + scalar;
     }
-
     return result;
 }
 
 Vector Vector::operator-(double scalar) const {
     Vector result(size());
-
     for (size_t i = 0; i < size(); ++i) {
-        result.data[i] = data[i] - scalar;
+        result[i] = data[i] - scalar;
     }
-
     return result;
 }
 
@@ -376,10 +324,8 @@ Vector Vector::operator/(double scalar) const {
     }
 
     Vector result(size());
-
     for (size_t i = 0; i < size(); ++i) {
-        result.data[i] = data[i] / scalar;
+        result[i] = data[i] / scalar;
     }
-
     return result;
 }

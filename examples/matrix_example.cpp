@@ -1,114 +1,137 @@
-#include "ml/linalg/matrix.hpp"
 #include <iostream>
+#include "ml/linalg/vector.hpp"
+#include "ml/linalg/matrix.hpp"
 
-int main()
-{
-    std::cout << "=== Dataset (Feature Matrix X) ===\n";
+int main() {
+    std::cout << "===== MATRIX EXAMPLE =====\n\n";
 
-    // 3 samples, 3 features
-    Matrix X(3,3);
+    Matrix A(3, 3);
+    A(0,0) = 1; A(0,1) = 2; A(0,2) = 3;
+    A(1,0) = 4; A(1,1) = 5; A(1,2) = 6;
+    A(2,0) = 7; A(2,1) = 8; A(2,2) = 10;
 
-    X(0,0)=1; X(0,1)=2; X(0,2)=3;
-    X(1,0)=4; X(1,1)=5; X(1,2)=6;
-    X(2,0)=7; X(2,1)=8; X(2,2)=9;
+    Matrix B(3, 3);
+    B(0,0) = 1; B(0,1) = 0; B(0,2) = 2;
+    B(1,0) = -1; B(1,1) = 3; B(1,2) = 1;
+    B(2,0) = 4; B(2,1) = 1; B(2,2) = 0;
 
-    std::cout << "X:\n";
-    X.print();
+    std::cout << "Matrix A:\n";
+    A.print();
 
+    std::cout << "\nMatrix B:\n";
+    B.print();
 
-    std::cout << "\n=== Weights Initialization ===\n";
+    std::cout << "\nBasic operations:\n";
+    std::cout << "A + B:\n";
+    (A + B).print();
 
-    Vector w(3, 1.0);   // 3 features → 3 weights
-    double bias = 0.5;
+    std::cout << "\nA - B:\n";
+    (A - B).print();
 
-    std::cout << "w: ";
-    w.print();
+    std::cout << "\nA * 2:\n";
+    (A * 2.0).print();
 
+    std::cout << "\n2 * A:\n";
+    (2.0 * A).print();
 
-    std::cout << "\n=== Forward Pass (Prediction) ===\n";
+    std::cout << "\nA / 2:\n";
+    (A / 2.0).print();
 
-    // y_pred = Xw + b
-    Vector y_pred = X * w + bias;
+    std::cout << "\nIn-place operations:\n";
+    Matrix C = A;
+    C += B;
+    std::cout << "C = A; C += B:\n";
+    C.print();
 
-    std::cout << "Predictions:\n";
-    y_pred.print();
+    C = A;
+    C -= B;
+    std::cout << "\nC = A; C -= B:\n";
+    C.print();
 
+    C = A;
+    C *= 3.0;
+    std::cout << "\nC = A; C *= 3:\n";
+    C.print();
 
-    std::cout << "\n=== Basic Matrix Ops ===\n";
+    C = A;
+    C /= 2.0;
+    std::cout << "\nC = A; C /= 2:\n";
+    C.print();
 
-    std::cout << "X + 1:\n";
-    (X + 1.0).print();
+    std::cout << "\nMatrix × Vector:\n";
+    Vector x = {1.0, 2.0, 3.0};
+    std::cout << "x: ";
+    x.print();
+    std::cout << "A * x:\n";
+    (A * x).print();
 
-    std::cout << "X * 2:\n";
-    (X * 2.0).print();
+    std::cout << "\nMatrix × Matrix:\n";
+    Matrix AB = A * B;
+    AB.print();
 
-    std::cout << "Transpose(X):\n";
-    X.transpose().print();
+    std::cout << "\nTranspose(A):\n";
+    A.transpose().print();
 
+    std::cout << "\nShape/stat utilities:\n";
+    std::cout << "rows(A): " << A.rows() << '\n';
+    std::cout << "cols(A): " << A.cols() << '\n';
+    std::cout << "sum(A): " << A.sum() << '\n';
+    std::cout << "mean(A): " << A.mean() << '\n';
+    std::cout << "trace(A): " << A.trace() << '\n';
 
-    std::cout << "\n=== Feature-wise Statistics ===\n";
+    std::cout << "\nRow 1 of A:\n";
+    A.row(1).print();
 
-    std::cout << "Column Mean:\n";
-    X.mean(0).print();
+    std::cout << "Col 2 of A:\n";
+    A.col(2).print();
 
-    std::cout << "Row Sum:\n";
-    X.sum(1).print();
+    std::cout << "\nColumn mean of A:\n";
+    A.columnMean().print();
 
+    std::cout << "\nNormalize(A):\n";
+    A.normalize().print();
 
-    std::cout << "\n=== Normalization / Standardization ===\n";
+    std::cout << "\nStandardize(A):\n";
+    A.standardize().print();
 
-    Matrix X_norm = X.normalize();
-    std::cout << "Normalized X:\n";
-    X_norm.print();
+    std::cout << "\nHadamard(A, B):\n";
+    A.hadamard(B).print();
 
-    Matrix X_std = X.standardize();
-    std::cout << "Standardized X:\n";
-    X_std.print();
+    std::cout << "\nApply (square each element):\n";
+    A.apply([](double z) { return z * z; }).print();
 
+    std::cout << "\nAxis-wise sum:\n";
+    std::cout << "sum(axis=0): ";
+    A.sum(0).print();
+    std::cout << "sum(axis=1): ";
+    A.sum(1).print();
 
-    std::cout << "\n=== Matrix Multiplication ===\n";
+    std::cout << "\nAxis-wise mean:\n";
+    std::cout << "mean(axis=0): ";
+    A.mean(0).print();
+    std::cout << "mean(axis=1): ";
+    A.mean(1).print();
 
-    Matrix Xt = X.transpose();
+    std::cout << "\nCovariance(A):\n";
+    A.covariance().print();
 
-    Matrix XtX = Xt * X;
+    std::cout << "\nCorrelation(A):\n";
+    A.correlation().print();
 
-    std::cout << "X^T * X:\n";
-    XtX.print();
-
-
-    std::cout << "\n=== Covariance & Correlation ===\n";
-
-    std::cout << "Covariance Matrix:\n";
-    X.covariance().print();
-
-    std::cout << "Correlation Matrix:\n";
-    X.correlation().print();
-
-
-    std::cout << "\n=== Small Linear System (Determinant & Inverse) ===\n";
-
-    Matrix D(2,2);
-    D(0,0)=4; D(0,1)=7;
-    D(1,0)=2; D(1,1)=6;
+    std::cout << "\nDeterminant and inverse test:\n";
+    Matrix D(2, 2);
+    D(0,0) = 4; D(0,1) = 7;
+    D(1,0) = 2; D(1,1) = 6;
 
     std::cout << "D:\n";
     D.print();
 
-    std::cout << "det(D): " << D.determinant() << "\n";
-
-    std::cout << "D^-1:\n";
+    std::cout << "det(D): " << D.determinant() << '\n';
+    std::cout << "inv(D):\n";
     D.inverse().print();
 
-
-    std::cout << "\n=== Gradient-style Update (Preview) ===\n";
-
-    Vector grad(3, 0.1);
-
-    w -= grad * 0.01;
-
-    std::cout << "Updated weights: ";
-    w.print();
-
+    std::cout << "\nIdentity(3):\n";
+    Matrix::identity(3).print();
 
     return 0;
 }

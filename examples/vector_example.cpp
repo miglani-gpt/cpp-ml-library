@@ -1,80 +1,89 @@
-#include "ml/linalg/vector.hpp"
 #include <iostream>
+#include "ml/linalg/vector.hpp"
+#include "ml/linalg/matrix.hpp"
 
-int main()
-{
-    std::cout << "=== Input Feature Vector ===\n";
+int main() {
+    std::cout << "===== VECTOR EXAMPLE =====\n\n";
 
-    // Feature vector (example: 5 features)
-    Vector x(5);
-    for (size_t i = 0; i < x.size(); i++)
-        x[i] = i + 1;   // [1, 2, 3, 4, 5]
+    Vector v = {1.0, 2.0, 3.0, 4.0};
+    Vector w = {4.0, 3.0, 2.0, 1.0};
 
-    std::cout << "x: ";
-    x.print();
-
-
-    std::cout << "\n=== Weight Initialization ===\n";
-
-    // Weight vector
-    Vector w(5, 2.0);
+    std::cout << "v: ";
+    v.print();
 
     std::cout << "w: ";
     w.print();
 
+    std::cout << "\nBasic operations:\n";
+    std::cout << "v + w: ";
+    (v + w).print();
 
-    std::cout << "\n=== Basic Operations ===\n";
+    std::cout << "v - w: ";
+    (v - w).print();
 
-    std::cout << "x + w: ";
-    (x + w).print();
+    std::cout << "v * 2: ";
+    (v * 2.0).print();
 
-    std::cout << "x - w: ";
-    (x - w).print();
+    std::cout << "2 * v: ";
+    (2.0 * v).print();
 
-    std::cout << "x * 3: ";
-    (x * 3.0).print();
+    std::cout << "v / 2: ";
+    (v / 2.0).print();
 
-    std::cout << "2 * x: ";
-    (2.0 * x).print();
+    std::cout << "\nIn-place operations:\n";
+    Vector a = v;
+    a += w;
+    std::cout << "a = v; a += w: ";
+    a.print();
 
+    a = v;
+    a -= w;
+    std::cout << "a = v; a -= w: ";
+    a.print();
 
-    std::cout << "\n=== Prediction (Linear Model) ===\n";
+    a = v;
+    a *= 3.0;
+    std::cout << "a = v; a *= 3: ";
+    a.print();
 
-    double bias = 1.5;
+    a = v;
+    a /= 2.0;
+    std::cout << "a = v; a /= 2: ";
+    a.print();
 
-    double y_pred = x.dot(w) + bias;
+    std::cout << "\nML/stat utilities:\n";
+    std::cout << "sum(v): " << v.sum() << '\n';
+    std::cout << "mean(v): " << v.mean() << '\n';
+    std::cout << "norm(v): " << v.norm() << '\n';
+    std::cout << "argmax(v): " << v.argmax() << '\n';
+    std::cout << "argmin(v): " << v.argmin() << '\n';
 
-    std::cout << "Prediction (x·w + b): " << y_pred << "\n";
+    std::cout << "normalize(v): ";
+    v.normalize().print();
 
+    std::cout << "\nHadamard product:\n";
+    std::cout << "v hadamard w: ";
+    v.hadamard(w).print();
 
-    std::cout << "\n=== Statistics ===\n";
+    std::cout << "\nApply:\n";
+    std::cout << "v.apply(x -> x*x): ";
+    v.apply([](double x) { return x * x; }).print();
 
-    std::cout << "sum(x): " << x.sum() << "\n";
-    std::cout << "mean(x): " << x.mean() << "\n";
-    std::cout << "argmax(x): " << x.argmax() << "\n";
-    std::cout << "argmin(x): " << x.argmin() << "\n";
+    std::cout << "\nDot product:\n";
+    std::cout << "v dot w: " << v.dot(w) << '\n';
 
+    std::cout << "\nOuter product (v outer w):\n";
+    Matrix outer = v.outer(w);
+    outer.print();
 
-    std::cout << "\n=== Normalization ===\n";
+    std::cout << "\nElement access:\n";
+    std::cout << "v[2]: " << v[2] << '\n';
+    std::cout << "v.get(1): " << v.get(1) << '\n';
 
-    Vector x_norm = x.normalize();
-
-    std::cout << "normalized x: ";
-    x_norm.print();
-
-
-    std::cout << "\n=== Element-wise Operations (Gradient-style) ===\n";
-
-    Vector grad(5, 0.1);
-
-    std::cout << "gradient: ";
-    grad.print();
-
-    Vector updated_w = w - (grad * 0.01);
-
-    std::cout << "updated weights: ";
-    updated_w.print();
-
+    Vector t = v;
+    t.set(0, 99.0);
+    std::cout << "after t.set(0, 99): ";
+    t.print();
 
     return 0;
 }

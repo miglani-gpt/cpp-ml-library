@@ -4,7 +4,6 @@
 #include <vector>
 #include <cstddef>
 #include <stdexcept>
-#include <functional>
 
 class Vector; // forward declaration
 
@@ -26,6 +25,10 @@ public:
     /* Move Semantics */
     Matrix(Matrix&& other) noexcept;
     Matrix& operator=(Matrix&& other) noexcept;
+
+    // Copy semantics
+    Matrix(const Matrix& other);
+    Matrix& operator=(const Matrix& other);
 
     /* Shape */
     [[nodiscard]] size_t rows() const;
@@ -88,7 +91,16 @@ public:
     Matrix correlation() const;
 
     /* ML Ops */
-    Matrix apply(std::function<double(double)> func) const;
+    template <typename Func>
+    Matrix apply(Func f) const {
+        Matrix result(rows(), cols());   // ✅ correct
+        for (size_t i = 0; i < rows(); ++i) {
+            for (size_t j = 0; j < cols(); ++j) {
+                result(i, j) = f((*this)(i, j));
+            }
+        }
+        return result;
+    }
 
     /* Scalar Ops */
     Matrix operator+(double scalar) const;
