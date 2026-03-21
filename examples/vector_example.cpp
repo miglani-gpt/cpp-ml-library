@@ -3,64 +3,78 @@
 
 int main()
 {
-    std::cout << "=== Vector Construction ===\n";
+    std::cout << "=== Input Feature Vector ===\n";
 
-    Vector v1(5);
-    Vector v2(5, 2.0);
+    // Feature vector (example: 5 features)
+    Vector x(5);
+    for (size_t i = 0; i < x.size(); i++)
+        x[i] = i + 1;   // [1, 2, 3, 4, 5]
 
-    for (size_t i = 0; i < v1.size(); i++)
-        v1[i] = i + 1;
-
-    std::cout << "v1: ";
-    v1.print();
-
-    std::cout << "v2: ";
-    v2.print();
+    std::cout << "x: ";
+    x.print();
 
 
-    std::cout << "\n=== Vector Arithmetic ===\n";
+    std::cout << "\n=== Weight Initialization ===\n";
 
-    Vector add = v1 + v2;
-    Vector sub = v1 - v2;
-    Vector mul = v1 * 3.0;
-    Vector mul2 = 2.0 * v1;
+    // Weight vector
+    Vector w(5, 2.0);
 
-    std::cout << "v1 + v2: ";
-    add.print();
-
-    std::cout << "v1 - v2: ";
-    sub.print();
-
-    std::cout << "v1 * 3: ";
-    mul.print();
-
-    std::cout << "2 * v1: ";
-    mul2.print();
+    std::cout << "w: ";
+    w.print();
 
 
-    std::cout << "\n=== Dot Product & Norm ===\n";
+    std::cout << "\n=== Basic Operations ===\n";
 
-    double dot = v1.dot(v2);
-    double norm = v1.norm();
+    std::cout << "x + w: ";
+    (x + w).print();
 
-    std::cout << "dot(v1, v2): " << dot << "\n";
-    std::cout << "||v1||: " << norm << "\n";
+    std::cout << "x - w: ";
+    (x - w).print();
+
+    std::cout << "x * 3: ";
+    (x * 3.0).print();
+
+    std::cout << "2 * x: ";
+    (2.0 * x).print();
 
 
-    std::cout << "\n=== Statistical Utilities ===\n";
+    std::cout << "\n=== Prediction (Linear Model) ===\n";
 
-    std::cout << "sum(v1): " << v1.sum() << "\n";
-    std::cout << "mean(v1): " << v1.mean() << "\n";
-    std::cout << "argmax(v1): " << v1.argmax() << "\n";
-    std::cout << "argmin(v1): " << v1.argmin() << "\n";
+    double bias = 1.5;
+
+    double y_pred = x.dot(w) + bias;
+
+    std::cout << "Prediction (x·w + b): " << y_pred << "\n";
+
+
+    std::cout << "\n=== Statistics ===\n";
+
+    std::cout << "sum(x): " << x.sum() << "\n";
+    std::cout << "mean(x): " << x.mean() << "\n";
+    std::cout << "argmax(x): " << x.argmax() << "\n";
+    std::cout << "argmin(x): " << x.argmin() << "\n";
 
 
     std::cout << "\n=== Normalization ===\n";
 
-    Vector norm_v = v1.normalize();
+    Vector x_norm = x.normalize();
 
-    std::cout << "normalized v1: ";
-    norm_v.print();
+    std::cout << "normalized x: ";
+    x_norm.print();
+
+
+    std::cout << "\n=== Element-wise Operations (Gradient-style) ===\n";
+
+    Vector grad(5, 0.1);
+
+    std::cout << "gradient: ";
+    grad.print();
+
+    Vector updated_w = w - (grad * 0.01);
+
+    std::cout << "updated weights: ";
+    updated_w.print();
+
 
     return 0;
 }

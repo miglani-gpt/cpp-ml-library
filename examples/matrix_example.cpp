@@ -3,141 +3,112 @@
 
 int main()
 {
-    std::cout << "=== Matrix Construction ===\n";
+    std::cout << "=== Dataset (Feature Matrix X) ===\n";
 
-    Matrix A(3,3);
+    // 3 samples, 3 features
+    Matrix X(3,3);
 
-    A(0,0)=1; A(0,1)=2; A(0,2)=3;
-    A(1,0)=4; A(1,1)=5; A(1,2)=6;
-    A(2,0)=7; A(2,1)=8; A(2,2)=9;
+    X(0,0)=1; X(0,1)=2; X(0,2)=3;
+    X(1,0)=4; X(1,1)=5; X(1,2)=6;
+    X(2,0)=7; X(2,1)=8; X(2,2)=9;
 
-    std::cout << "Matrix A:\n";
-    A.print();
-
-
-    std::cout << "\n=== Identity Matrix ===\n";
-
-    Matrix I = Matrix::identity(3);
-    I.print();
+    std::cout << "X:\n";
+    X.print();
 
 
-    std::cout << "\n=== Matrix Arithmetic ===\n";
+    std::cout << "\n=== Weights Initialization ===\n";
 
-    Matrix B(3,3,1.0);
+    Vector w(3, 1.0);   // 3 features → 3 weights
+    double bias = 0.5;
 
-    Matrix add = A + B;
-    Matrix sub = A - B;
-    Matrix scalar = A * 2.0;
-    Matrix scalar2 = 2.0 * A;
-
-    std::cout << "A + B:\n";
-    add.print();
-
-    std::cout << "A - B:\n";
-    sub.print();
-
-    std::cout << "A * 2:\n";
-    scalar.print();
-
-    std::cout << "2 * A:\n";
-    scalar2.print();
+    std::cout << "w: ";
+    w.print();
 
 
-    std::cout << "\n=== Hadamard Product ===\n";
+    std::cout << "\n=== Forward Pass (Prediction) ===\n";
 
-    Matrix had = A.hadamard(B);
-    had.print();
+    // y_pred = Xw + b
+    Vector y_pred = X * w + bias;
 
-
-    std::cout << "\n=== Matrix Transpose ===\n";
-
-    Matrix At = A.transpose();
-    At.print();
+    std::cout << "Predictions:\n";
+    y_pred.print();
 
 
-    std::cout << "\n=== Row / Column Extraction ===\n";
+    std::cout << "\n=== Basic Matrix Ops ===\n";
 
-    Vector r = A.row(1);
-    Vector c = A.col(2);
+    std::cout << "X + 1:\n";
+    (X + 1.0).print();
 
-    std::cout << "Row 1: ";
-    r.print();
+    std::cout << "X * 2:\n";
+    (X * 2.0).print();
 
-    std::cout << "Column 2: ";
-    c.print();
+    std::cout << "Transpose(X):\n";
+    X.transpose().print();
 
 
-    std::cout << "\n=== Matrix Vector Multiplication ===\n";
+    std::cout << "\n=== Feature-wise Statistics ===\n";
 
-    Vector v(3);
+    std::cout << "Column Mean:\n";
+    X.mean(0).print();
 
-    v[0]=1;
-    v[1]=2;
-    v[2]=3;
+    std::cout << "Row Sum:\n";
+    X.sum(1).print();
 
-    Vector result = A * v;
 
-    std::cout << "A * v = ";
-    result.print();
+    std::cout << "\n=== Normalization / Standardization ===\n";
+
+    Matrix X_norm = X.normalize();
+    std::cout << "Normalized X:\n";
+    X_norm.print();
+
+    Matrix X_std = X.standardize();
+    std::cout << "Standardized X:\n";
+    X_std.print();
 
 
     std::cout << "\n=== Matrix Multiplication ===\n";
 
-    Matrix C = A * I;
+    Matrix Xt = X.transpose();
 
-    C.print();
+    Matrix XtX = Xt * X;
 
-
-    std::cout << "\n=== Matrix Statistics ===\n";
-
-    std::cout << "Sum: " << A.sum() << "\n";
-    std::cout << "Mean: " << A.mean() << "\n";
-    std::cout << "Trace: " << A.trace() << "\n";
+    std::cout << "X^T * X:\n";
+    XtX.print();
 
 
-    std::cout << "\n=== Normalization ===\n";
+    std::cout << "\n=== Covariance & Correlation ===\n";
 
-    Matrix norm = A.normalize();
-    norm.print();
+    std::cout << "Covariance Matrix:\n";
+    X.covariance().print();
+
+    std::cout << "Correlation Matrix:\n";
+    X.correlation().print();
 
 
-    std::cout << "\n=== Determinant ===\n";
+    std::cout << "\n=== Small Linear System (Determinant & Inverse) ===\n";
 
     Matrix D(2,2);
-
     D(0,0)=4; D(0,1)=7;
     D(1,0)=2; D(1,1)=6;
 
-    std::cout << "Matrix D:\n";
+    std::cout << "D:\n";
     D.print();
 
     std::cout << "det(D): " << D.determinant() << "\n";
 
-
-    std::cout << "\n=== Inverse ===\n";
-
-    Matrix inv = D.inverse();
-
     std::cout << "D^-1:\n";
-    inv.print();
+    D.inverse().print();
 
 
-    std::cout << "\n=== Standardization ===\n";
+    std::cout << "\n=== Gradient-style Update (Preview) ===\n";
 
-    Matrix std = A.standardize();
-    std.print();
+    Vector grad(3, 0.1);
 
+    w -= grad * 0.01;
 
-    std::cout << "\n=== Covariance Matrix ===\n";
+    std::cout << "Updated weights: ";
+    w.print();
 
-    Matrix cov = A.covariance();
-    cov.print();
-
-
-    std::cout << "\n=== Correlation Matrix ===\n";
-
-    Matrix corr = A.correlation();
-    corr.print();
 
     return 0;
 }

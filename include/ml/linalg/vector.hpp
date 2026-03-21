@@ -4,15 +4,22 @@
 #include <vector>
 #include <cstddef>
 #include <stdexcept>
+#include <functional>
+
+class Matrix; // forward declaration
 
 class Vector {
 private:
-    std::vector<double> data; // internal storage for vector elements
+    std::vector<double> data;
 
 public:
     /* Constructors */
     explicit Vector(size_t size);
     Vector(size_t size, double initialValue);
+
+    /* Move Semantics */
+    Vector(Vector&& other) noexcept;
+    Vector& operator=(Vector&& other) noexcept;
 
     /* Size */
     [[nodiscard]] size_t size() const;
@@ -32,6 +39,12 @@ public:
     Vector operator-(const Vector& other) const;
     Vector operator*(double scalar) const;
 
+    /* In-place operations */
+    Vector& operator+=(const Vector& other);
+    Vector& operator-=(const Vector& other);
+    Vector& operator*=(double scalar);
+    Vector& operator/=(double scalar);
+
     /* Scalar * Vector support */
     friend Vector operator*(double scalar, const Vector& v);
 
@@ -46,6 +59,16 @@ public:
 
     /* Utility */
     void print() const;
+
+    /* ML Ops */
+    Vector apply(std::function<double(double)> func) const;
+    Vector hadamard(const Vector& other) const;
+    Matrix outer(const Vector& other) const;
+
+    /* Scalar ops */
+    Vector operator+(double scalar) const;
+    Vector operator-(double scalar) const;
+    Vector operator/(double scalar) const;
 };
 
 #endif
