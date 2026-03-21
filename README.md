@@ -20,18 +20,6 @@ The goal is to understand **how real machine learning libraries are implemented 
 
 ---
 
-# Demo
-
-*(Optional — add a GIF later)*
-
-Example placeholder:
-
-![demo](docs/demo.gif)
-
-You can record a short terminal demo and place it in `docs/demo.gif`.
-
----
-
 # Table of Contents
 
 - Overview
